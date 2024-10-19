@@ -9,6 +9,6 @@ public class PageController {
     @GetMapping("/show")
     public String show()
     {
-        return "/show.html";
+        return "/templates/show.html";
     }
 }

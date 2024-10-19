@@ -10,13 +10,16 @@ function connect() {
 	stompClient = Stomp.over(socket);
 	stompClient.connect({}, function (frame) {
 		writeToScreen("connected: " + frame);
-		stompClient.subscribe('/topic/chat', function (response) {
+		/*stompClient.subscribe('/topic/chat', function (response) {
+			writeToScreen(response.body);
+		});
+*/
+		stompClient.subscribe("/user/" + userId, function (response) {
+			alert(1)
 			writeToScreen(response.body);
 		});
 
-		stompClient.subscribe("/queue/user_" + userId, function (response) {
-			writeToScreen(response.body);
-		});
+
 		//
 		// stompClient.subscribe('/sendToAll', function (response) {
 		// 	writeToScreen("sendToAll:" + response.body);

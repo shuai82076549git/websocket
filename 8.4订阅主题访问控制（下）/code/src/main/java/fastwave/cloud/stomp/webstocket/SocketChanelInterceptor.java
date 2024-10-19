@@ -84,6 +84,7 @@ public class SocketChanelInterceptor implements ChannelInterceptor {
                 throw new IllegalArgumentException("抱歉，您没有访问权限");
             }
         }
+
         else if(StompCommand.SUBSCRIBE.equals(accessor.getCommand()))
         {
             String topic = accessor.getDestination().toString();

@@ -16,9 +16,9 @@
         connect();
     });
 
-    function sendToAll() {
+    function send() {
       var msg = $("#msg").val();
-      stompClient.send("/app/sendToAll", {}, msg);
+      stompClient.send("/send", {}, msg);
     }
 
     function sendToUser() {
@@ -36,7 +36,6 @@
   <!-- 发送消息-->
   <div>用户：<input type="text" id="userId"></input></div>
   <div>消息：<input type="text" id="msg"></input></div>
-  <div><input type="button" value="点对点发送消息" onclick="sendToUser()"></input></div>
-  <div><input type="button" value="群发送消息" onclick="sendToAll()"></input></div>
+  <div><input type="button" value="发送消息" onclick="sendToUser()"></input></div>
 </body>
 </html>

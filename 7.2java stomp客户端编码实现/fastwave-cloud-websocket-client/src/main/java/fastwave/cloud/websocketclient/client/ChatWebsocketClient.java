@@ -56,7 +56,13 @@ public class ChatWebsocketClient {
                         stompHeaders, chatStompSessionHandler);
                 stompSession = future.get();
                 stompSession.setAutoReceipt(true);
-                stompSession.subscribe("/queue/" + userId + "/topic", chatStompSessionHandler);
+                stompSession.acknowledge("client", true);
+
+                StompSession.Subscription subscribe = stompSession.subscribe("/user/topic/client", chatStompSessionHandler);
+                System.out.println(subscribe.getReceiptId());
+                subscribe.addReceiptTask(()->{
+                    System.out.println(subscribe.getReceiptId()+"...........");
+                });
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
@@ -68,7 +74,11 @@ public class ChatWebsocketClient {
 
     public String sendMessage(String msg)
     {
-        stompSession.send("/app/sendToUser", msg.getBytes());
+        StompSession.Receiptable receiptable = stompSession.send("/app/sendToUser", msg.getBytes());
+        System.out.println(receiptable.getReceiptId()+"________________");
+        receiptable.addReceiptTask(()->{
+            System.out.println(receiptable.getReceiptId()+"==============");
+        });
         return "已发送";
     }
 }

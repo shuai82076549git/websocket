@@ -16,16 +16,16 @@
         connect();
     });
 
-    function send() {
+    function sendToAll() {
       var msg = $("#msg").val();
-      stompClient.send("/send", {}, msg);
+      stompClient.send("/app/sendToAll", {}, msg);
     }
 
     function sendToUser() {
       var msg = $("#msg").val();
       var toUserId = $("#userId").val();
       var data  = {"fromUserId": userId, "toUserId": toUserId, "msg": msg};
-      stompClient.send("/sendToUser", {}, JSON.stringify(data));
+      stompClient.send("/app/sendToUser", {"receipt": "message-123"}, JSON.stringify(data));
     }
 </script>
 </head>
@@ -36,6 +36,7 @@
   <!-- 发送消息-->
   <div>用户：<input type="text" id="userId"></input></div>
   <div>消息：<input type="text" id="msg"></input></div>
-  <div><input type="button" value="发送消息" onclick="sendToUser()"></input></div>
+  <div><input type="button" value="点对点发送消息" onclick="sendToUser()"></input></div>
+  <div><input type="button" value="群发送消息" onclick="sendToAll()"></input></div>
 </body>
 </html>

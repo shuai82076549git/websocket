@@ -19,12 +19,12 @@ public class ChatController {
 
     @ResponseBody
     @GetMapping("/send")
-    public String sendMessage(@RequestParam Map<String, Object> params)
+    public String sendMessage()
     {
         HashMap<String, Object> maps = new HashMap<>();
         maps.put("fromUserId", 100);
-        maps.put("toUserId", params.get("userId").toString());
-        maps.put("msg", params.get("msg").toString());
+        maps.put("toUserId", "100");
+        maps.put("msg", "aaa");
         String json = JSON.toJSONString(maps);
         chatWebsocketClient.sendMessage(json);
 

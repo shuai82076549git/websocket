@@ -20,7 +20,7 @@ public class MonitorController {
 	@GetMapping("/show")
 	public String show()
 	{
-		return "/show.html";
+		return "/templates/show.html";
 	}
 
 	@ResponseBody

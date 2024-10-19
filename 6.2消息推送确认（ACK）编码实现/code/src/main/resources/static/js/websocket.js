@@ -7,7 +7,10 @@ function connect() {
 	userId =  GetQueryString("userId");
 	var socket = new SockJS("http://" + host + "/websocket");
 	stompClient = Stomp.over(socket);
-	stompClient.connect({}, function (frame) {
+	stompClient.connect({"receipt": "message-124"}, function (frame) {
+		stompClient.onreceipt = function(receipt) {
+			console.log("Received receipt for message with id:", receipt.headers["receipt-id"]);
+		};
 		writeToScreen("connected: " + frame);
 
 		//1./exchange/<exchangeName>
@@ -17,10 +20,12 @@ function connect() {
 
 		//2./queue/<queueName>
 		stompClient.subscribe("/queue/user" + userId, function (response) {
-
+			var messageId = response.headers['message-id'];
+			console.log("Received message-id:", messageId);
 						writeToScreen(response.body);
 						response.ack();
-					},{ack:'client'});
+
+					},{receipt: 'sub-11111',ack: 'client'});
 
 		//4./topic/<topicName>
 		// stompClient.subscribe("/topic/user" + userId, function (response) {
@@ -28,6 +33,7 @@ function connect() {
 		// 	writeToScreen(response.body);
 		// 	response.ack();
 		// },{ack:'client'});
+
 
 		stompClient.subscribe("/queue/chat", function (response) {
 			writeToScreen(response.body);

@@ -1,14 +1,19 @@
 package fastwave.cloud.stomp.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.MessageHeaders;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
+import java.util.UUID;
 
 
 @RestController
@@ -31,10 +36,11 @@ public class WebsocketController {
 
     /**
      * 2./queue/<queueName>
+     *
      * @param params
      */
     @MessageMapping("/sendToUser")
-    public void sendToUserByTemplate(Map<String,String> params) {
+    public void sendToUserByTemplate(Message<?> message, Map<String, String> params) {
         String fromUserId = params.get("fromUserId");
         String toUserId = params.get("toUserId");
         String msg = "来自" + fromUserId + "消息:" + params.get("msg");
@@ -44,7 +50,6 @@ public class WebsocketController {
 
     /**
      * 4./topic/<topicName>
-     * @param params
      */
 //    @MessageMapping("/sendToUser")
 //    public void sendToUserByTemplate(Map<String,String> params) {
