@@ -1,8 +1,10 @@
 package fastwave.cloud.stomp.controller;
 
+import com.alibaba.fastjson.JSON;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHeaders;
+import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -22,85 +25,25 @@ public class WebsocketController {
     private SimpMessagingTemplate template;
 
     /**
-     * /exchange/<exchangeName>
-     * @param params
-     */
-//    @MessageMapping("/sendToUser")
-//    public void sendToUserByTemplate(Map<String,String> params) {
-//        String fromUserId = params.get("fromUserId");
-//        String toUserId = params.get("toUserId");
-//        String msg = "来自" + fromUserId + "消息:" + params.get("msg");
-//        String destination = "/exchange/sendToUser/user" + toUserId;
-//        template.convertAndSend(destination, msg);
-//    }
-
-    /**
      * 2./queue/<queueName>
      *
      * @param params
      */
     @MessageMapping("/sendToUser")
-    public void sendToUserByTemplate(Message<?> message, Map<String, String> params) {
+    public void sendToUserByTemplate(Map<String, String> params) {
         String fromUserId = params.get("fromUserId");
         String toUserId = params.get("toUserId");
         String msg = "来自" + fromUserId + "消息:" + params.get("msg");
-        String destination = "/queue/user" + toUserId;
-        template.convertAndSend(destination, msg);
+        String destination = "/topic/user" + toUserId;
+        TextMessage textMessage = new TextMessage();
+        textMessage.setText(msg);
+        template.convertAndSend(destination, textMessage);
     }
 
-    /**
-     * 4./topic/<topicName>
-     */
-//    @MessageMapping("/sendToUser")
-//    public void sendToUserByTemplate(Map<String,String> params) {
-//        String fromUserId = params.get("fromUserId");
-//        String toUserId = params.get("toUserId");
-//        String msg = "来自" + fromUserId + "消息:" + params.get("msg");
-//        String destination = "/topic/user" + toUserId;
-//        template.convertAndSend(destination, msg);
-//    }
-
-//    @MessageMapping("/sendToAll")
-//    public void sendToAll(String msg) {
-//        String destination = "/topic/chat";
-//        template.convertAndSend(destination, msg);
-//    }
 
     @MessageMapping("/sendToAll")
     public void sendToAll(String msg) {
         String destination = "/queue/chat";
         template.convertAndSend(destination, msg);
     }
-
-//    @MessageMapping("/sendToAll")
-//    public String sendToAll(String msg) {
-//        return msg;
-//    }
-//
-//    @MessageMapping("/send")
-//    @SendTo("/topic")
-//    public String say(String msg) {
-//        return msg;
-//    }
-//
-//    @MessageMapping("/sendToUser")
-//    public void sendToUserByTemplate(Map<String,String> params) {
-//        String fromUserId = params.get("fromUserId");
-//        String toUserId = params.get("toUserId");
-//        String msg = "来自" + fromUserId + "消息:" + params.get("msg");
-//
-//        template.convertAndSendToUser(toUserId,"/topic", msg);
-//    }
-//
-//    @GetMapping("/sendToAllByTemplate")
-//    @MessageMapping("/sendToAllByTemplate")
-//    public void sendToAllByTemplate(@RequestParam String msg) {
-//        template.convertAndSend("/topic", msg);
-//    }
-//
-//    @GetMapping("/send")
-//    public String msgReply(@RequestParam String msg) {
-//        template.convertAndSend("/topic", msg);
-//        return msg;
-//    }
 }

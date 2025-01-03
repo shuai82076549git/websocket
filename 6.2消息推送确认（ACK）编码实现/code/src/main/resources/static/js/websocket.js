@@ -19,37 +19,22 @@ function connect() {
 		// 	});
 
 		//2./queue/<queueName>
-		stompClient.subscribe("/queue/user" + userId, function (response) {
+		stompClient.subscribe("/topic/user" + userId, function (response) {
 			var messageId = response.headers['message-id'];
+			var subscription = response.headers['subscription'];
 			console.log("Received message-id:", messageId);
-						writeToScreen(response.body);
-						response.ack();
+			console.log("Received subscription:", subscription);
 
-					},{receipt: 'sub-11111',ack: 'client'});
-
-		//4./topic/<topicName>
-		// stompClient.subscribe("/topic/user" + userId, function (response) {
-		// 	//var ii = aaa/0;
-		// 	writeToScreen(response.body);
-		// 	response.ack();
-		// },{ack:'client'});
+			writeToScreen(response.body);
+			//response.ack();
+			//response.ack(messageId);
+			stompClient.ack(messageId,subscription); // 发送 ACK 确认消息
+		}, {receipt: 'sub-11111',ack:'client-individual'});
 
 
-		stompClient.subscribe("/queue/chat", function (response) {
+		stompClient.subscribe("/topic/chat", function (response) {
 			writeToScreen(response.body);
 		});
-
-		// stompClient.subscribe('/topic', function (response) {
-		// 	writeToScreen(response.body);
-		// });
-		//
-		// stompClient.subscribe("/queue/" + userId + "/topic", function (response) {
-		// 	writeToScreen(response.body);
-		// });
-		//
-		// stompClient.subscribe('/sendToAll', function (response) {
-		// 	writeToScreen("sendToAll:" + response.body);
-		// });
 
 		}, function (error) {
 			wsCreateHandler && clearTimeout(wsCreateHandler);

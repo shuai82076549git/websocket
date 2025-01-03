@@ -15,7 +15,6 @@ function connect() {
 		});
 */
 		stompClient.subscribe("/user/" + userId, function (response) {
-			alert(1)
 			writeToScreen(response.body);
 		});
 

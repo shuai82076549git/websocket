@@ -39,8 +39,8 @@ public class WebsocketController {
 
         String destination1 = "/queue/user_" + toUserId;
         String destination2 = "/topic/user" + toUserId;
-        //template.convertAndSend(destination2, msg);
-        template.convertAndSendToUser(toUserId,"/topic", msg);
+        template.convertAndSend(destination2, msg);
+        //template.convertAndSendToUser(toUserId,"/topic", msg);
         //template.convertAndSend("/topic/" + 1, msg);
     }
 

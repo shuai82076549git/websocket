@@ -23,8 +23,6 @@ import java.security.Principal;
 
 public class WebSocketEventListener {
 
-    @Autowired
-    private AbstractSubscribableChannel clientOutboundChannel;
     /**
      * 连接成功事件
      * @param event
